@@ -6,15 +6,27 @@ Store the PDF in Google Cloud Storage
 
 Be triggered by Cloud Scheduler
 
-Prerequisites
-Enable the following Google Cloud APIs:
+1. Create gcs Bucket
+gsutil mb -p YOUR_PROJECT_ID -l us-central1 gs://your-bucket-name/
 
-Cloud Functions API
+2. Deploy cloud function
+gcloud functions deploy scheduledReport \
+  --gen2 \
+  --runtime=nodejs20 \
+  --region=us-central1 \
+  --entry-point=scheduledReport \
+  --trigger-http \
+  --allow-unauthenticated \
+  --memory=512MB \
+  --timeout=60s \
+  --set-env-vars="SMTP_USER=your_smtp2go_user,SMTP_PASS=your_smtp2go_pass,EMAIL_TO=to@example.com,EMAIL_FROM=from@example.com"
 
-Cloud Scheduler API
+3. Cloud Scheduler
+gcloud scheduler jobs create http daily-pdf-job \
+  --schedule="0 7 * * *" \
+  --http-method=GET \
+  --uri="https://REGION-PROJECT.cloudfunctions.net/scheduledReport" \
+  --timezone="Asia/Makassar" \
+  --oidc-service-account-email="YOUR_SA@YOUR_PROJECT.iam.gserviceaccount.com"
 
-Cloud Storage API
 
-Create a Google Cloud Storage bucket
-
-Install required dependencies
