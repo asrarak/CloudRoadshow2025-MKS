@@ -1,0 +1,10 @@
+{
+  "name": "pdf-capture-email",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "puppeteer": "^21.3.8",
+    "@google-cloud/storage": "^7.10.0",
+    "nodemailer": "^6.9.13"
+  }
+}
